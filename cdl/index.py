@@ -2,9 +2,6 @@ from collections import defaultdict
 from cdl.list import IndexList
 import re
 
-# TODO refactor so the class returns the strings rather than printing them
-# this is so a GUI can use the class as well
-
 
 class Index():
     """This class is meant to hold information about the index.
@@ -64,19 +61,14 @@ class Index():
                             self._index[match.lower()].append(file_name)
         except FileNotFoundError:
             raise FileNotFoundError('[Error] File does not exist!')
-            #  print('[Error] File does not exist!')
         except IsADirectoryError:
             raise IsADirectoryError('[Error] That is a directory!')
-            #  print('[Error] That is a directory!')
         except PermissionError:
             raise PermissionError('[Error] Permission denied!')
-            #  print('[Error] Permission denied!')
         except Exception as e:
             raise Exception('An error occured: ', e)
-            #  print('An error occurred: ', e)
         else:
             return '[Success] File was added to index!'
-            #  print('[Success] File was added to index!')
 
     def _get_index_list_for_word(self, word):
         """This function returns an IndexList associated with a word.
