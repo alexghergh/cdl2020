@@ -105,11 +105,11 @@ in the root of the project, where `<env>` is the environment name (if you follow
 
 This should give you a code style report of the whole project.
 
-### Author
+## Author
 
 Author: Gherghescu Alexandru (@alexghergh)
 
-### License
+## License
 
 This project is licensed under the terms of the MIT license.  
-For more details, see [LICENSE.md](https://www.github.com/alexghergh/cdl2020/blob/master/LICENSE.md).
+For more details, see [LICENSE.md](LICENSE.md).
