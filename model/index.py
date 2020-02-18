@@ -1,5 +1,5 @@
 from collections import defaultdict
-from cdl.list import IndexList
+from model.list import IndexList
 import re
 
 
@@ -43,11 +43,21 @@ class Index():
         Args:
             file_name: The file to be scanned.
 
+        Returns:
+            Success string if the file was added to index.
+
+        Raises:
+            IndexError: If the file is already in the index.
+            FileNotFoundError: If the file does not exist.
+            IsADirectoryError: If a directory was passed.
+            PermissionError: If the user running the script doesn't have
+                permission on a file.
+            Exception: If another exception arose.
+
         """
         # Return if file was already scanned
         if file_name in self._files:
-            print('[Error] The file is already in the index!')
-            return
+            raise IndexError(f'[Error] "{file_name}" is already in the index!')
 
         try:
             # Open the file, add it to the _files list, then apply the
@@ -60,15 +70,15 @@ class Index():
                         if file_name not in self._index[match.lower()]:
                             self._index[match.lower()].append(file_name)
         except FileNotFoundError:
-            raise FileNotFoundError('[Error] File does not exist!')
+            raise FileNotFoundError(f'[Error] The file "{file_name}" does not exist!')
         except IsADirectoryError:
-            raise IsADirectoryError('[Error] That is a directory!')
+            raise IsADirectoryError(f'[Error] "{file_name}" is a directory!')
         except PermissionError:
-            raise PermissionError('[Error] Permission denied!')
+            raise PermissionError(f'[Error] Permission denied for "{file_name}"!')
         except Exception as e:
-            raise Exception('An error occured: ', e)
+            raise Exception(f'An error occured for "{file_name}": ', e)
         else:
-            return '[Success] File was added to index!'
+            return f'[Success] The file "{file_name}" was added to index!'
 
     def _get_index_list_for_word(self, word):
         """This function returns an IndexList associated with a word.

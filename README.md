@@ -80,20 +80,52 @@ if you did not create a virtual environment.
 
 **Important:** If you chose to work with a virtual environment, you need to activate and deactivate every time you run the python executable. To do this, refer to number **3**.
 
-### Example
+## How to use
+
+If a file named `files.txt` exists, the program will scan it and will add all the file names in it to the index (assuming that no errors arise during the scan).
+
+For the program to recognize file names, you have to have one file name per line.
+
+Example `files.txt`:
 
 ```
-$ python main.py
+# Everything starting with a # is a comment and is ignored
+main.py
+model/index.py
+# This file lacks permissions so it won't be scanned
+/etc/shadow
+# This file doesn't exist
+not_a_file
+        # also a comment
+```
+
+Output for the above `files.txt`:
+
+```
+[Success] The file "main.py" was added to index!
+[Success] The file "model/index.py" was added to index!
+[Error] Permission denied for "/etc/shadow"!
+[Error] The file "not_a_file" does not exist!
+Query: from && source
+Files that matched the query:
+```
+
+Normal example (without `files.txt`):
+
+```
+files.txt was not found, continuing with manual file addition.
 File to add to index (or simply press enter for query): main.py
-[Success] File was added to index!
-File to add to index (or simply press enter for query): wrong_file.py
-[Error] File does not exist!
-File to add to index (or simply press enter for query):
-Query: from && !(source) && (pi || file)
+[Success] The file "main.py" was added to index!
+File to add to index (or simply press enter for query): not_a_file.py
+[Error] The file "not_a_file.py" does not exist!
+File to add to index (or simply press enter for query): 
+Query: from && !(source) && (source || file)
 Files that matched the query: main.py
 ```
 
-### Tests
+## Tests
+
+### Code style tests
 
 Currently, Python's 3.8 'walrus operator' is not supported by the code style module, but you can still run it by doing:
 
