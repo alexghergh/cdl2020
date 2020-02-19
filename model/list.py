@@ -95,6 +95,7 @@ class IndexList():
 
         Returns:
             An iterable from the list object.
+
         """
         return iter(self.lst)
 
@@ -103,5 +104,6 @@ class IndexList():
 
         Returns:
             The string representation of the class.
+
         """
         return f'IndexList({str(self.lst)})'
