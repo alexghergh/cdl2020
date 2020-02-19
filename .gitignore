@@ -130,3 +130,6 @@ dmypy.json
 
 # Commit template for github
 .git-commit-template.txt
+
+# Config files for the program
+files.txt
