@@ -8,7 +8,7 @@ class Index():
 
     The way we hold an index is through these 2 fields:
       1. files: A list keeping the names of the files scanned so far.
-      2. index: A dictionary that holds words as keys, and the files
+      2. index: A dictionary that holds words as keys, and the files' number
       they appear in as values. The values are lists of integers representing
       the files a word appears in.
 
@@ -21,13 +21,11 @@ class Index():
 
         _index: The index has a structure like this:
             {
-                'from': ['doc1', 'doc2'],
-                'kernel': ['doc1'],
-                'c': ['doc2', 'doc3']
+                'from': [1, 2],
+                'kernel': [1],
+                'c': [2, 3],
             }
         where 'from', 'kernel' and 'c' are words from the documents.
-        It actually uses a defaultdict instead of a regular dict, but the
-        result is the same.
 
         _regex: A regex expression to match words only, since that is what
         we're interested in.
@@ -35,7 +33,7 @@ class Index():
         """
         self._files = []
         self._index = defaultdict(list)
-        self._regex = re.compile(r'\w+')
+        self._regex = re.compile(r'[a-zA-Z]+')
 
     def add_file(self, file_name):
         """Scan a file and add the words to the index.
@@ -60,15 +58,18 @@ class Index():
             raise IndexError(f'[Error] "{file_name}" is already in the index!')
 
         try:
-            # Open the file, add it to the _files list, then apply the
-            # regex to every line in it
+
             with open(file_name) as file:
+                # Add the file name to the files list
                 self._files.append(file_name)
-                for line in file:
-                    matches = self._regex.findall(line)
-                    for match in matches:
-                        if file_name not in self._index[match.lower()]:
-                            self._index[match.lower()].append(file_name)
+
+                # Create a set of words from the file
+                words = set(self._regex.findall(file.read().lower()))
+
+                # Add the words to the index
+                for word in words:
+                    self._index[word].append(len(self._files))
+
         except FileNotFoundError:
             raise FileNotFoundError(f'[Error] The file "{file_name}" does not exist!')
         except IsADirectoryError:
@@ -82,15 +83,23 @@ class Index():
 
     def _get_index_list_for_word(self, word):
         """This function returns an IndexList associated with a word.
+
+        Example:
+            A word goes from [1, 2, 5] in the index to [1, 1, 0, 0, 1] in order
+            to create an IndexList from it.
+
         For more info see IndexList in 'list.py'.
 
         Args:
             word: The word to return an IndexList for.
 
         """
-        word_list = [1 if file in self._index[word.lower()]
-                     else 0
-                     for file in self._files]
+        # Populate the lists with 0's
+        word_list = [0] * len(self._files)
+
+        # Change it to 1 when the word appears in a file
+        for item in self._index[word.lower()]:
+            word_list[item - 1] = 1
         return IndexList(word_list)
 
     def get_result_for_query(self, query):
@@ -98,6 +107,9 @@ class Index():
 
         Args:
             query: The query to return a result for.
+            A query has the form of:
+            - word1 && word2 || (word3 && !word4)
+            It can have any variations of words and signs.
 
         """
         # Replace every word with the corresponding IndexList object

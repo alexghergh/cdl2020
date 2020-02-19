@@ -99,7 +99,7 @@ not_a_file
         # also a comment
 ```
 
-Output for the above `files.txt`:
+Corresponding message from the program for the above `files.txt`:
 
 ```
 [Success] The file "main.py" was added to index!
@@ -109,6 +109,8 @@ Output for the above `files.txt`:
 Query: from && source
 Files that matched the query:
 ```
+
+The output means that both the words `from` and `source` didn't appear in any of the scanned files.
 
 Normal example (without `files.txt`):
 
@@ -122,6 +124,8 @@ File to add to index (or simply press enter for query):
 Query: from && !(source) && (source || file)
 Files that matched the query: main.py
 ```
+
+The output means that we found a match for the query in the file `main.py`.
 
 ## Tests
 
