@@ -127,6 +127,18 @@ Files that matched the query: main.py
 
 The output means that we found a match for the query in the file `main.py`.
 
+### Additional configuration through the config.json file
+
+The program supports additional tweaking for the parameters of the index through the `config.json` file.
+
+The parameters that can be changed are:
+
+`remove_stop_words`
+
+This parameter specifies whether stop words should be removed. Stop words are words that don't carry information and are usually irrelevant in the context of a search engine. Such word examples are: 'as', 'so', 'me', 'I', 'am', etc. This parameter can be either true or false. If it is missing from the config.json file, it defaults to false.
+
+Default: `false`
+
 ## Tests
 
 ### Code style tests

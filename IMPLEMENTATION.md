@@ -21,11 +21,19 @@ The IndexList holds a regular list of 1's and 0's, representing whether a word a
 
 For more info on this see [list.py](model/list.py).
 
+There is also a `config` directory holding information about external configuration, that has a Config class with the following meaning.
+
+#### Config
+
+The Config class reads the `config.json` configuration file and makes it easily accesible to the program through a Python dictionary.
+
+For more info see [config.py](config/config.py).
+
 ### Algorithm
 
 The algorithm is simple enough. First we see if there is a `files.txt`. If there is, we scan the file names from it. If there is not, we read them from the input.
 
-After that, we construct a set of words from every file one at a time, then we build the index with the words from the set.
+After that, we construct a set of words from every file one at a time, remove the stop words if we need to, and build the index with the words from the set.
 
 The next step is solving the query:
 
