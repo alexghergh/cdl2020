@@ -135,9 +135,19 @@ The parameters that can be changed are:
 
 `remove_stop_words`
 
-This parameter specifies whether stop words should be removed. Stop words are words that don't carry information and are usually irrelevant in the context of a search engine. Such word examples are: 'as', 'so', 'me', 'I', 'am', etc. This parameter can be either true or false. If it is missing from the config.json file, it defaults to false.
+This parameter specifies whether stop words should be removed. Stop words are words that don't carry information and are usually irrelevant in the context of a search engine. Such word examples are: 'as', 'so', 'me', 'I', 'am', etc.
+
+Possible values: true, false.
 
 Default: `false`
+
+`stop_words_language`
+
+This parameter changes the language through which the program does stop words removal. Basically if you have a text in english, choose english as the language.
+
+Possible values: english, romanian.
+
+Default: `english`
 
 ## Tests
 

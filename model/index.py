@@ -2,7 +2,6 @@ from model.list import IndexList
 
 from config import config
 from collections import defaultdict
-from stop_words import get_stop_words
 import re
 
 
@@ -123,8 +122,9 @@ class Index():
             return files
 
     def _remove_stopwords(self, words_list):
-        """This function uses the stop_words package to remove stopwords from a list
-        of words.
+        """This function uses the stopwords directory to remove stopwords from
+        a list of words.
+
         Stopwords are words that do not carry information, i.e. they are useless
         in the context of a search engine ('a', 'is', 'any', 'before', etc.).
 
@@ -132,7 +132,9 @@ class Index():
             words_list: The word list that needs to be picked for stopwords.
 
         """
-        stop_words = get_stop_words('en')
+        with open(f'stopwords/{self._config.language()}') as stopwords_file:
+            stop_words = [x.strip() for x in stopwords_file.readlines()]
+
         return [word for word in words_list if word not in stop_words and
                 len(word) > 2]
 

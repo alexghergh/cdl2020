@@ -27,3 +27,13 @@ class Config():
 
         """
         return self._config.get('remove_stop_words', True)
+
+    def language(self):
+        """This function returns the language used for stop word removal.
+        Defaults to english if the parameter is missing.
+
+        Returns:
+            The language used for stopwords removal.
+
+        """
+        return self._config.get('stop_words_language', 'english')

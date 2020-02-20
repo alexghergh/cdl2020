@@ -1,2 +1,3 @@
+nltk==3.4.5
 pycodestyle==2.5.0
-stop-words==2018.7.23
+six==1.14.0
