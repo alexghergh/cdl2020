@@ -1,5 +1,8 @@
-from collections import defaultdict
 from model.list import IndexList
+
+from config import config
+from collections import defaultdict
+from stop_words import get_stop_words
 import re
 
 
@@ -30,10 +33,15 @@ class Index():
         _regex: A regex expression to match words only, since that is what
         we're interested in.
 
+        _config: A Config instance through which the Index receives certain
+        configs from the external file 'config.json'.
+        For more see config/config.py.
+
         """
         self._files = []
         self._index = defaultdict(list)
-        self._regex = re.compile(r'[a-zA-Z]+')
+        self._regex = re.compile(r'\w+')
+        self._config = config
 
     def add_file(self, file_name):
         """Scan a file and add the words to the index.
@@ -63,8 +71,12 @@ class Index():
                 # Add the file name to the files list
                 self._files.append(file_name)
 
-                # Create a set of words from the file
+                # Construct a set from the words within the file
                 words = set(self._regex.findall(file.read().lower()))
+
+                # If 'remove_stopwords' is set, remove the stopwords
+                if self._config.remove_stopwords():
+                    words = self._remove_stopwords(words)
 
                 # Add the words to the index
                 for word in words:
@@ -80,27 +92,6 @@ class Index():
             raise Exception(f'An error occured for "{file_name}": ', e)
         else:
             return f'[Success] The file "{file_name}" was added to index!'
-
-    def _get_index_list_for_word(self, word):
-        """This function returns an IndexList associated with a word.
-
-        Example:
-            A word goes from [1, 2, 5] in the index to [1, 1, 0, 0, 1] in order
-            to create an IndexList from it.
-
-        For more info see IndexList in 'list.py'.
-
-        Args:
-            word: The word to return an IndexList for.
-
-        """
-        # Populate the lists with 0's
-        word_list = [0] * len(self._files)
-
-        # Change it to 1 when the word appears in a file
-        for item in self._index[word.lower()]:
-            word_list[item - 1] = 1
-        return IndexList(word_list)
 
     def get_result_for_query(self, query):
         """This function returns a result for a query.
@@ -130,3 +121,38 @@ class Index():
                      for index, item in enumerate(list(res))
                      if item == 1]
             return files
+
+    def _remove_stopwords(self, words_list):
+        """This function uses the stop_words package to remove stopwords from a list
+        of words.
+        Stopwords are words that do not carry information, i.e. they are useless
+        in the context of a search engine ('a', 'is', 'any', 'before', etc.).
+
+        Args:
+            words_list: The word list that needs to be picked for stopwords.
+
+        """
+        stop_words = get_stop_words('en')
+        return [word for word in words_list if word not in stop_words and
+                len(word) > 2]
+
+    def _get_index_list_for_word(self, word):
+        """This function returns an IndexList associated with a word.
+
+        Example:
+            A word goes from [1, 2, 5] in the index to [1, 1, 0, 0, 1] in order
+            to create an IndexList from it.
+
+        For more info see IndexList in 'list.py'.
+
+        Args:
+            word: The word to return an IndexList for.
+
+        """
+        # Populate the lists with 0's
+        word_list = [0] * len(self._files)
+
+        # Change it to 1 when the word appears in a file
+        for item in self._index[word.lower()]:
+            word_list[item - 1] = 1
+        return IndexList(word_list)

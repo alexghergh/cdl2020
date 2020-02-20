@@ -1,1 +1,2 @@
 pycodestyle==2.5.0
+stop-words==2018.7.23
