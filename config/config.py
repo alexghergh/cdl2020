@@ -47,6 +47,6 @@ class Config():
         """
         # If 'remove_stop_words' is set to true and language is not english,
         # don't apply stemming
-        if self.remove_stopword() and self.language() != 'english':
+        if self.remove_stopwords() and self.language() != 'english':
             return False
         return self._config.get('use_stemming', False)
