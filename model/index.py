@@ -2,6 +2,7 @@ from model.list import IndexList
 
 from config import config
 from collections import defaultdict
+from nltk.stem.snowball import EnglishStemmer
 import re
 
 
@@ -77,6 +78,10 @@ class Index():
                 if self._config.remove_stopwords():
                     words = self._remove_stopwords(words)
 
+                # If 'use_stemming' is set, stem the words
+                if self._config.use_stemming():
+                    words = self._apply_stemming(words)
+
                 # Add the words to the index
                 for word in words:
                     self._index[word].append(len(self._files))
@@ -125,11 +130,11 @@ class Index():
         """This function uses the stopwords directory to remove stopwords from
         a list of words.
 
-        Stopwords are words that do not carry information, i.e. they are useless
-        in the context of a search engine ('a', 'is', 'any', 'before', etc.).
-
         Args:
             words_list: The word list that needs to be picked for stopwords.
+
+        Returns:
+            A new list with the stopwords removed.
 
         """
         with open(f'stopwords/{self._config.language()}') as stopwords_file:
@@ -137,6 +142,20 @@ class Index():
 
         return [word for word in words_list if word not in stop_words and
                 len(word) > 2]
+
+    def _apply_stemming(self, words_list):
+        """This function applies the stemming algorithm to every word in the
+        words list.
+
+        Args:
+            words_list: The word list to which to apply the stemming algorithm.
+
+        Returns:
+            A new list with stemming applied to the words.
+
+        """
+        stemmer = EnglishStemmer()
+        return [stemmer.stem(word) for word in words_list]
 
     def _get_index_list_for_word(self, word):
         """This function returns an IndexList associated with a word.
@@ -153,6 +172,10 @@ class Index():
         """
         # Populate the lists with 0's
         word_list = [0] * len(self._files)
+
+        # Stem the word if necessary
+        if self._config.use_stemming():
+            word = EnglishStemmer().stem(word)
 
         # Change it to 1 when the word appears in a file
         for item in self._index[word.lower()]:

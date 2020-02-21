@@ -1,4 +1,5 @@
 {
     "remove_stop_words": false,
-    "stop_words_language": "english"
+    "stop_words_language": "english",
+    "use_stemming": false
 }
