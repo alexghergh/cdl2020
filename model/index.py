@@ -88,13 +88,17 @@ class Index():
                     self._index[word].append(len(self._files))
 
         except FileNotFoundError:
-            raise FileNotFoundError(f'[Error] The file "{file_name}" does not exist!')
+            raise FileNotFoundError(
+                    f'[Error] The file "{file_name}" does not exist!')
         except IsADirectoryError:
-            raise IsADirectoryError(f'[Error] "{file_name}" is a directory!')
+            raise IsADirectoryError(
+                    f'[Error] "{file_name}" is a directory!')
         except PermissionError:
-            raise PermissionError(f'[Error] Permission denied for "{file_name}"!')
+            raise PermissionError(
+                    f'[Error] Permission denied for "{file_name}"!')
         except Exception as e:
-            raise Exception(f'An error occured for "{file_name}": ', e)
+            raise Exception(
+                    f'An error occured for "{file_name}": ', e)
         else:
             return f'[Success] The file "{file_name}" was added to index!'
 
@@ -139,8 +143,9 @@ class Index():
 
         """
         stop_words = []
-        if path.isfile(f'stopwords/{self._config.language()}'):
-            with open(f'stopwords/{self._config.language()}') as stopwords_file:
+        stop_words_path = f'stopwords/{self._config.language()}'
+        if path.isfile(stop_words_path):
+            with open(stop_words_path) as stopwords_file:
                 stop_words = [x.strip() for x in stopwords_file.readlines()]
 
         return [word for word in words_list if word not in stop_words and

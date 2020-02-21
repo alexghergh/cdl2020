@@ -1,5 +1,6 @@
 import json
 
+
 class Config():
     """This is a simple class to read configuration data from the config.json
     file and store it here.
