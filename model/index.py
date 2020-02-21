@@ -3,6 +3,7 @@ from model.list import IndexList
 from config import config
 from collections import defaultdict
 from nltk.stem.snowball import EnglishStemmer
+from os import path
 import re
 
 
@@ -137,8 +138,10 @@ class Index():
             A new list with the stopwords removed.
 
         """
-        with open(f'stopwords/{self._config.language()}') as stopwords_file:
-            stop_words = [x.strip() for x in stopwords_file.readlines()]
+        stop_words = []
+        if path.isfile(f'stopwords/{self._config.language()}'):
+            with open(f'stopwords/{self._config.language()}') as stopwords_file:
+                stop_words = [x.strip() for x in stopwords_file.readlines()]
 
         return [word for word in words_list if word not in stop_words and
                 len(word) > 2]
