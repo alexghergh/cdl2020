@@ -33,7 +33,7 @@ For more info see [config.py](config/config.py).
 
 The algorithm is simple enough. First we see if there is a `files.txt`. If there is, we scan the file names from it. If there is not, we read them from the input.
 
-After that, we construct a set of words from every file one at a time, remove the stop words if we need to, and build the index with the words from the set.
+After that, we construct a set of words from every file one at a time, remove the stop words if we need to, apply the stemming algorithm if stemming is enabled, and build the index with the words from the set.
 
 The next step is solving the query:
 

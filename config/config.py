@@ -41,11 +41,12 @@ class Config():
     def use_stemming(self):
         """This function returns whether the program should use stemming.
 
-        Stemming is the procedure through which common word endings are removed.
-        Example: 'cycles' and 'cycling' evaluate to the same base word: 'cycl'
-
         Returns:
             True if stemming should be used, False otherwise.
 
         """
+        # If 'remove_stop_words' is set to true and language is not english,
+        # don't apply stemming
+        if self.remove_stopword() and self.language() != 'english':
+            return False
         return self._config.get('use_stemming', False)

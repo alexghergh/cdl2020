@@ -149,6 +149,16 @@ Possible values: english, romanian.
 
 Default: `english`
 
+`use_stemming`
+
+This parameter specifies whether stemming should be used or not. Stemming is the process through which common word endings are removed. E.g.: Both `cycling` and `cycles` evaluate to the base word `cycl`. Basically, if a document contains words that are not in the base form (`continuing`, `cycles`, etc.) and stemming is enabled, both `continue` and `cycling` should match the document.
+
+**Note:** Currently, only english stemming is supported. So if you have other language than `english` enabled and `remove_stop_words` set to `true`, stemming will automatically be disabled.
+
+Possible values: true, false.
+
+Default: `false`
+
 ## Tests
 
 ### Code style tests
