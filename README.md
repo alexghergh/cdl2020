@@ -80,6 +80,8 @@ if you did not create a virtual environment.
 
 **Important:** If you chose to work with a virtual environment, you need to activate and deactivate every time you run the python executable. To do this, refer to number **3**.
 
+**Note:** From now on, unless specified otherwise, every command run is considered to be inside a virtual environment. This means that if you do not have a virtual environment enabled, you should probably replace `python` with `python3.8` and `pip` with `pip3`.
+
 ## How to use
 
 If a file named `files.txt` exists, the program will scan it and will add all the file names in it to the index (assuming that no errors arise during the scan).
@@ -102,6 +104,7 @@ not_a_file
 Corresponding message from the program for the above `files.txt`:
 
 ```
+$ python main.py
 [Success] The file "main.py" was added to index!
 [Success] The file "model/index.py" was added to index!
 [Error] Permission denied for "/etc/shadow"!
@@ -115,6 +118,7 @@ The output means that both the words `from` and `source` didn't appear in any of
 Normal example (without `files.txt`):
 
 ```
+$ python main.py
 files.txt was not found, continuing with manual file addition.
 File to add to index (or simply press enter for query): main.py
 [Success] The file "main.py" was added to index!
