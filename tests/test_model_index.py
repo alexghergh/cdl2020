@@ -5,6 +5,7 @@ import unittest
 import unittest.mock as mock
 from collections import defaultdict
 
+
 class IndexTestCase(unittest.TestCase):
 
     @mock.patch('model.index.Config.__init__', autospec=True, spec_set=True)
@@ -20,7 +21,6 @@ class IndexTestCase(unittest.TestCase):
                 index.add_file('doc1')
                 with self.assertRaises(IndexError):
                     index.add_file('doc1')
-
 
     def test_add_file_raises_file_not_found_error(self):
         with mock.patch('model.index.Config', autospec=True, spec_set=True):
@@ -63,7 +63,6 @@ class IndexTestCase(unittest.TestCase):
                 index = Index()
                 index.add_file('document')
             m.assert_called_once_with('document')
-
 
     def test_add_file_correct_index_structure_with_more_files(self):
         data1 = 'some data'
@@ -196,7 +195,6 @@ class IndexTestCase(unittest.TestCase):
             idx._files = files
             assert idx.get_result_for_query(query) == expected
 
-
     def test_empty_query(self):
         index = defaultdict(list, {'data': [1, 3], 'some':[1, 2], 'hello': [1], 'world': [3]})
         files = ['doc1', 'doc2', 'doc3', 'doc4']
@@ -224,3 +222,17 @@ class IndexTestCase(unittest.TestCase):
             idx._files = files
             with self.assertRaises(ValueError):
                 result = idx.get_result_for_query(query)
+
+    def test_query_with_stemming_enabled(self):
+        index = defaultdict(list, {'continuo': [1, 3], 'cycl':[1, 2], 'hello': [1], 'world': [3]})
+        files = ['doc1', 'doc2', 'doc3', 'doc4']
+        query = 'continuos && cycling'
+        expected = ['doc1']
+        with mock.patch('model.index.Config', autospec=True, spec_set=True) as mock_config:
+            mock_config.return_value.remove_stopwords.return_value = False
+            mock_config.return_value.language.return_value = 'english'
+            mock_config.return_value.use_stemming.return_value = True
+            idx = Index()
+            idx._index = index
+            idx._files = files
+            assert idx.get_result_for_query(query) == expected
