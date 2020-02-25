@@ -1,4 +1,6 @@
 import json
+import warnings
+import os
 
 
 class Config():
@@ -13,9 +15,20 @@ class Config():
         _config: A dictionary used to hold the configuration read from the
         'config.json' file.
 
+        Raises:
+            ValueError: if the config.json has wrong format.
+
         """
-        with open('config.json') as config_file:
-            self._config = json.load(config_file)
+        try:
+
+            with open('config.json') as config_file:
+                self._config = json.load(config_file)
+
+        except FileNotFoundError:
+            warnings.warn('[Warning] Could not find config.json. Continuing with defaults.')
+            self._config = {}
+        except json.decoder.JSONDecodeError as e:
+            raise json.decoder.JSONDecodeError('[JSON Error] Please check that your config.json file is correct.', e.doc, e.pos)
 
     def remove_stopwords(self):
         """This function returns whether the program should remove stopwords or
@@ -27,7 +40,10 @@ class Config():
             True if stopwords should be removed, False otherwise.
 
         """
-        return self._config.get('remove_stop_words', True)
+        remove_stopwords = self._config.get('remove_stop_words', False)
+        if remove_stopwords not in [False, True]:
+            return False
+        return remove_stopwords
 
     def language(self):
         """This function returns the language used for stop word removal.
@@ -37,7 +53,11 @@ class Config():
             The language used for stopwords removal.
 
         """
-        return self._config.get('stop_words_language', 'english')
+        language = self._config.get('stop_words_language', 'english')
+        if language not in os.listdir('stopwords'):
+            warnings.warn(f"[Warning] Language '{language}' not supported, continuing with english.")
+            return 'english'
+        return language
 
     def use_stemming(self):
         """This function returns whether the program should use stemming.
@@ -46,8 +66,11 @@ class Config():
             True if stemming should be used, False otherwise.
 
         """
+        use_stemming = self._config.get('use_stemming', False)
+        if use_stemming not in [False, True]:
+            return False
         # If 'remove_stop_words' is set to true and language is not english,
         # don't apply stemming
         if self.remove_stopwords() and self.language() != 'english':
             return False
-        return self._config.get('use_stemming', False)
+        return use_stemming

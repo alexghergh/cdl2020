@@ -27,7 +27,19 @@ class IndexList():
         information.
 
         """
-        self.lst = lst
+        # check that indeed the list passed as parameter contains only 1's and 0's
+        if not all(item in [1, 0] for item in lst):
+            raise ValueError("[Error] IndexList contains values different from 1 and 0.")
+        self._lst = lst
+
+    @property
+    def lst(self):
+        """Simple getter for the list object.
+
+        Returns:
+            The list containing 1's and 0's.
+        """
+        return self._lst
 
     def __and__(self, other):
         """AND between 2 IndexList objects. What it does is take 2 IndexList
@@ -49,7 +61,7 @@ class IndexList():
         """
         lst = [1 if i == 1 and j == 1
                else 0
-               for i, j in zip(self.lst, other.lst)]
+               for i, j in zip(self._lst, other.lst)]
         return IndexList(lst)
 
     def __or__(self, other):
@@ -72,7 +84,7 @@ class IndexList():
         """
         lst = [1 if i == 1 or j == 1
                else 0
-               for i, j in zip(self.lst, other.lst)]
+               for i, j in zip(self._lst, other.lst)]
         return IndexList(lst)
 
     def __invert__(self):
@@ -87,7 +99,7 @@ class IndexList():
             An IndexList, so chaining multiple operations is possible.
 
         """
-        lst = [0 if i == 1 else 1 for i in self.lst]
+        lst = [0 if i == 1 else 1 for i in self._lst]
         return IndexList(lst)
 
     def __iter__(self):
@@ -97,7 +109,7 @@ class IndexList():
             An iterable from the list object.
 
         """
-        return iter(self.lst)
+        return iter(self._lst)
 
     def __str__(self):
         """String representation of an IndexList object.
@@ -106,4 +118,4 @@ class IndexList():
             The string representation of the class.
 
         """
-        return f'IndexList({str(self.lst)})'
+        return f'IndexList({str(self._lst)})'

@@ -1,6 +1,6 @@
 from model.list import IndexList
+from config import Config
 
-from config import config
 from collections import defaultdict
 from nltk.stem.snowball import EnglishStemmer
 from os import path
@@ -38,11 +38,17 @@ class Index():
         configs from the external file 'config.json'.
         For more see config/config.py.
 
+        Raises:
+            ValueError: If the config.json has wrong format.
+
         """
         self._files = []
         self._index = defaultdict(list)
         self._regex = re.compile(r'\w+')
-        self._config = config
+        try:
+            self._config = Config()
+        except ValueError as e:
+            raise ValueError(e)
 
     def add_file(self, file_name):
         """Scan a file and add the words to the index.
@@ -54,14 +60,17 @@ class Index():
             Success string if the file was added to index.
 
         Raises:
+            ValueError: If the file_name is not a string.
             IndexError: If the file is already in the index.
             FileNotFoundError: If the file does not exist.
             IsADirectoryError: If a directory was passed.
             PermissionError: If the user running the script doesn't have
                 permission on a file.
-            Exception: If another exception arose.
 
         """
+        if not isinstance(file_name, str):
+            raise ValueError("[Error] That is not a file name!")
+
         # Return if file was already scanned
         if file_name in self._files:
             raise IndexError(f'[Error] "{file_name}" is already in the index!')
@@ -96,9 +105,6 @@ class Index():
         except PermissionError:
             raise PermissionError(
                     f'[Error] Permission denied for "{file_name}"!')
-        except Exception as e:
-            raise Exception(
-                    f'An error occured for "{file_name}": ', e)
         else:
             return f'[Success] The file "{file_name}" was added to index!'
 
@@ -111,7 +117,17 @@ class Index():
             - word1 && word2 || (word3 && !word4)
             It can have any variations of words and signs.
 
+        Returns:
+            A list containing the files that matched the query.
+
+        Raises:
+            ValueError: If the query is wrong!
+
         """
+        # If the query contains punctuation signs, raise error
+        if re.findall(r'[,./?\'"]', query):
+            raise ValueError('[Error] Query contains punctuation!')
+
         # Replace every word with the corresponding IndexList object
         query = self._regex.sub(
                 lambda match:
@@ -125,7 +141,10 @@ class Index():
 
         # If the query is not empty, return the files that match the query
         if query:
-            res = eval(query)
+            try:
+                res = eval(query)
+            except SyntaxError:
+                raise ValueError('[Error] Query is wrong!')
             files = [self._files[index]
                      for index, item in enumerate(list(res))
                      if item == 1]

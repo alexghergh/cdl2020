@@ -4,6 +4,14 @@ This is my submission for the [CDL 2020](https://cdl.rosedu.org/).
 
 ## Getting started
 
+**Important note:** Currently, the project is only tested on Ubuntu Linux, and the document has been written with that in mind. In theory, it should be running just as well on Windows and MacOS, as well as other Linux distributions with just a little bit of extra trouble.
+
+Things that won't work in Windows and need extra steps or workarounds:  
+- Makefile commands (you will have to manually run each command in the Makefile or use [this workaround to get make to work on Windows](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows))  
+- Different Python installation directory  
+- Different project directory  
+- Git needs to be installed for Windows
+
 ### Prerequisites
 
 **Python3.8+ is required for the software to run.** To install Python3.8, see [this](https://linuxize.com/post/how-to-install-python-3-8-on-ubuntu-18-04/).
@@ -64,23 +72,19 @@ then activate it:
 
 Install the requirements for the project:
 
-`pip install -r requirements.txt`
+`make install`
 
 #### 5. Running the project
 
 Everything should be done; you can simply run the program by typing:
 
-`python main.py`
+`make`
 
 or:
 
-`python3.8 main.py`
+`make run`
 
-if you did not create a virtual environment.
-
-**Important:** If you chose to work with a virtual environment, you need to activate and deactivate every time you run the python executable. To do this, refer to number **3**.
-
-**Note:** From now on, unless specified otherwise, every command run is considered to be inside a virtual environment. This means that if you do not have a virtual environment enabled, you should probably replace `python` with `python3.8` and `pip` with `pip3`.
+**Important:** If you chose to work with a virtual environment, you need to activate and deactivate every time you run the program. To do this, refer to number **3**.
 
 ## How to use
 
@@ -104,7 +108,7 @@ not_a_file
 Corresponding message from the program for the above `files.txt`:
 
 ```
-$ python main.py
+$ make
 [Success] The file "main.py" was added to index!
 [Success] The file "model/index.py" was added to index!
 [Error] Permission denied for "/etc/shadow"!
@@ -118,7 +122,7 @@ The output means that both the words `from` and `source` didn't appear in any of
 Normal example (without `files.txt`):
 
 ```
-$ python main.py
+$ make
 files.txt was not found, continuing with manual file addition.
 File to add to index (or simply press enter for query): main.py
 [Success] The file "main.py" was added to index!
@@ -157,7 +161,7 @@ Default: `english`
 
 This parameter specifies whether stemming should be used or not. Stemming is the process through which common word endings are removed. E.g.: Both `cycling` and `cycles` evaluate to the base word `cycl`. Basically, if a document contains words that are not in the base form (`continuing`, `cycles`, etc.) and stemming is enabled, both `continue` and `cycling` should match the document.
 
-**Note:** Currently, only english stemming is supported. So if you have other language than `english` enabled and `remove_stop_words` set to `true`, stemming will automatically be disabled.
+**Note:** Currently, only english stemming is supported. If you have other language than `english` enabled and `remove_stop_words` set to `true`, stemming will automatically be disabled.
 
 Possible values: true, false.
 
@@ -169,13 +173,21 @@ Default: `false`
 
 Currently, Python's 3.8 'walrus operator' is not supported by the code style module, but you can still run it by doing:
 
-`pycodestyle --exclude=<env> .`
+`make style_tests`
 
-in the root of the project, where `<env>` is the environment name (if you followed the instructions, it should be `env`).
-
-**Note:** Notice the **.** (dot) at the end of the command.
+in the root of the project, where the Makefile is located.
 
 This should give you a code style report of the whole project.
+
+### Unit tests
+
+To run unit tests, just do:
+
+`make tests`
+
+in the root of the project, where the Makefile is located.
+
+This will get you a report of the tests run.
 
 ## Author
 
