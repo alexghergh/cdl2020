@@ -23,18 +23,18 @@ style_tests:
 
 tests:
 ifdef VIRTUAL_ENV
-	@coverage run -m pytest -v -p no:warnings
+	@coverage run --source='.' --omit=env/*,tests/*,*/__init__.py -m pytest -v -p no:warnings
 else
 	@python3.8 -m pytest -v -p no:warnings
 endif
 
 coverage:
 ifdef VIRTUAL_ENV
-	@coverage report --omit=env/* -m
+	@coverage report -m --omit=env/*,tests/*,*/__init__.py
 else
 	@echo "Coverage only works with a virtual environment!!"
 	@echo "Create a virtual environment, install the dependencies with 'make install', then try again!"
 	@echo "Aborting..."
 endif
 
-.PHONY: install style_tests tests run
+.PHONY: run install style_tests tests coverage
