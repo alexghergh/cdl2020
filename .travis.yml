@@ -9,3 +9,7 @@ install:
 # run tests
 script:
     - make tests
+
+# upload code coverage
+after_success:
+    - bash <(curl -s https://codecov.io/bash)

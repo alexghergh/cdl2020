@@ -1,6 +1,7 @@
 # CDL 2020
 
 [![Build Status](https://travis-ci.com/alexghergh/cdl2020.svg?branch=master)](https://travis-ci.com/alexghergh/cdl2020)
+[![codecov](https://codecov.io/gh/alexghergh/cdl2020/branch/master/graph/badge.svg)](https://codecov.io/gh/alexghergh/cdl2020)
 
 This is my submission for the [CDL 2020](https://cdl.rosedu.org/).
 
@@ -190,6 +191,14 @@ To run unit tests, just do:
 in the root of the project, where the Makefile is located.
 
 This will get you a report of the tests run.
+
+### Coverage report
+
+For a full coverage report, simply run:
+
+`make coverage`
+
+in the root of the project.
 
 ## Author
 
