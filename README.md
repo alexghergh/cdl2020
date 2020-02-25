@@ -1,5 +1,7 @@
 # CDL 2020
 
+[![Build Status](https://travis-ci.com/alexghergh/cdl2020.svg?branch=master)](https://travis-ci.com/alexghergh/cdl2020)
+
 This is my submission for the [CDL 2020](https://cdl.rosedu.org/).
 
 ## Getting started
